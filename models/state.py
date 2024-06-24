@@ -5,7 +5,9 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column, String
 
 Base = declarative_base()
+
+
 class State(BaseModel, Base):
-    """ State class """
+    """ State class representing states in the application. """
     __tablename__ = 'states'
     name = Column(String(128), nullable=False)
