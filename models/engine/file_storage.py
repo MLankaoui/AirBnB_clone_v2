@@ -50,6 +50,12 @@ class FileStorage:
             pass
 
     def delete(self, obj=None):
+        """
+        Deletes obj from __objects if it’s inside.
+
+        Args:
+            obj (BaseModel): Object to be deleted from __objects.
+        """
         if obj:
             k = '{}.{}'.format(type(obj).__name__, obj.id)
             if k in self.__objects:
@@ -57,4 +63,7 @@ class FileStorage:
                 self.save()
 
     def close(self):
+        """
+        Calls reload() method for deserializing the JSON file to __objects.
+        """
         self.reload()
