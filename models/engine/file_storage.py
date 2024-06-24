@@ -48,3 +48,13 @@ class FileStorage:
                         self.all()[key] = classes[val['__class__']](**val)
         except FileNotFoundError:
             pass
+
+    def delete(self, obj=None):
+        if obj:
+            k = '{}.{}'.format(type(obj).__name__, obj.id)
+            if k in self.__objects:
+                del self.__objects[k]
+                self.save()
+
+    def close(self):
+        self.reload()
