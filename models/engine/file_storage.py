@@ -8,7 +8,7 @@ class FileStorage:
     __file_path = 'file.json'
     __objects = {}
 
-    def all(self, c):
+    def all(self, c=None):
         """Returns a dictionary of models currently in storage"""
         if c is None:
             return self.__objects
