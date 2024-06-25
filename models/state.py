@@ -14,7 +14,14 @@ STORAGE_TYPE = os.environ.get("HBNB_TYPE_STORAGE")
 
 
 class State(BaseModel, Base):
-    """ State class representing states in the application. """
+    """
+    State class representing states in the application.
+
+    Attributes:
+        __tablename__ (str): Name of the database table for states.
+        name (str): Name of the state.
+        cities (relationship): One-to-many relationship to the City model.
+    """
     __tablename__ = 'states'
     name = Column(String(128), nullable=False)
     cities = relationship("City", cascade='all, delete, delete-orphan',
@@ -23,6 +30,12 @@ class State(BaseModel, Base):
 
     @property
     def cities(self):
+        """
+        Getter property for cities related to the current state.
+
+        Returns:
+            list: List of City objects associated with the current state.
+        """
         if STORAGE_TYPE != 'db':
             v = models.storage.all()
             ls = {}

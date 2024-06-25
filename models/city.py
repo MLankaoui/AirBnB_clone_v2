@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-""" City Module for HBNB project. """
+""" City Module for the HBNB project. """
 from models.base_model import BaseModel
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column, String, ForeignKey
@@ -9,7 +9,15 @@ Base = declarative_base()
 
 
 class City(BaseModel, Base):
-    """ City class representing cities in the application. """
+    """
+    City class representing cities in the application.
+
+    Attributes:
+        __tablename__ (str): Name of the database table for cities.
+        state_id (str): Foreign key to the 'id' column of the 'states' table.
+        name (str): Name of the city.
+        places (relationship): Relationship to the Place model.
+    """
     __tablename__ = 'cities'
     state_id = Column(String(60), ForeignKey('states.id'), nullable=False)
     name = Column(String(128), nullable=False)
