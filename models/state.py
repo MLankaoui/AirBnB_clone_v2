@@ -1,40 +1,44 @@
 #!/usr/bin/python3
-"""This is the state class"""
-from sqlalchemy import Column, Integer, String
-import models
-from models.city import City
+""" State Module for HBNB project """
 import shlex
+import models
+from models.base_model import BaseModel
 from sqlalchemy.ext.declarative import declarative_base
-from models.base_model import BaseModel, Base
+from sqlalchemy import Column, String
 from sqlalchemy.orm import relationship
 import os
-STORAGE_TYPE = os.environ.get('HBNB_TYPE_STORAGE')
+
+Base = declarative_base()
+STORAGE_TYPE = os.environ.get("HBNB_TYPE_STORAGE")
+
 
 
 class State(BaseModel, Base):
-    """This is the class for State
-    Attributes:
-        name: input name
-    """
-    __tablename__ = "states"
+    """ State class representing states in the application. """
+    __tablename__ = 'states'
     name = Column(String(128), nullable=False)
     cities = relationship("City", cascade='all, delete, delete-orphan',
                           backref="state")
+    
 
     @property
     def cities(self):
         if STORAGE_TYPE != 'db':
-            var = models.storage.all()
-            lista = []
-            result = []
-            for key in var:
-                city = key.replace('.', ' ')
+            v = models.storage.all()
+            ls = {}
+            rs = []
+
+            for k in v:
+                city = k.replace('.', ' ')
                 city = shlex.split(city)
+
                 if city[0] == 'City':
-                    lista.append(var[key])
-            for elem in lista:
-                if elem.state_id == self.id:
-                    result.append(elem)
-            return result
+                    ls.append(v[k])
+            for el in ls:
+                if el.state_id == self.id:
+                    rs.append(el)
+
+            return rs
+        
         else:
-            return [city for city in self.cities]
+            return [city for city in self.citites]
