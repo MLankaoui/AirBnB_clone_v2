@@ -16,4 +16,3 @@ from sqlalchemy import (create_engine)
 class DBStorage:
     """ create tables in environmental"""
     
-        
