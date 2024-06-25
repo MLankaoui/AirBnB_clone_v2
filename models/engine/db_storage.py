@@ -29,4 +29,23 @@ class DBStorage:
         if getenv("HBNB_ENV") == "test":
             Base.metadata.drop_all(self.__engine)
 
+    def all(self, cls=None):
+        dc = {}
+        if cls:
+            if isinstance(cls, str):
+                cls = eval(cls)
+            qr = self.__session.query(cls)
+            for el in qr:
+                k = "{}.{}".format(type(el).__name__, el.id)
+                dc[k] = el
+        else:
+            ls = [State, City, User, Place, Review, Amenity]
+            for clase in dc:
+                qr = self.__session.query(clase)
+                for el in qr:
+                    k = "{}.{}".format(type(el).__name__, el.id)
+                    dc[k] = el
+        return (dc)
+
+
     
