@@ -8,17 +8,18 @@ class FileStorage:
     __file_path = 'file.json'
     __objects = {}
 
-    def all(self, cls=None):
-        """Returns a dictionary of models of one type of class
-        currently in storage"""
-        if cls is None:
+    def all(self, c):
+        """Returns a dictionary of models currently in storage"""
+        if c is None:
             return self.__objects
+        
         else:
-            temp = {}
-            for key, val in self.__objects.items():
-                if val.__class__ == cls:
-                    temp[key] = val
-            return temp
+            tmp = {}
+            for k, v in self.__objects.items():
+                if v.__class__ == c:
+                    tmp[k] = v
+            
+            return tmp
 
     def new(self, obj):
         """Adds new object to storage dictionary"""
@@ -44,28 +45,34 @@ class FileStorage:
         from models.review import Review
 
         classes = {
-            'BaseModel': BaseModel, 'User': User, 'Place': Place,
-            'State': State, 'City': City, 'Amenity': Amenity,
-            'Review': Review
-        }
+                    'BaseModel': BaseModel, 'User': User, 'Place': Place,
+                    'State': State, 'City': City, 'Amenity': Amenity,
+                    'Review': Review
+                  }
         try:
             temp = {}
             with open(FileStorage.__file_path, 'r') as f:
                 temp = json.load(f)
                 for key, val in temp.items():
-                    self.all()[key] = classes[val['__class__']](**val)
+                        self.all()[key] = classes[val['__class__']](**val)
         except FileNotFoundError:
             pass
 
     def delete(self, obj=None):
-        ''' delete obj from __objects if it's inside '''
+        """
+        Deletes obj from __objects if it’s inside.
 
+        Args:
+            obj (BaseModel): Object to be deleted from __objects.
+        """
         if obj:
-            key = '{}.{}'.format(type(obj).__name__, obj.id)
-            if key in self.__objects:
-                del self.__objects[key]
+            k = '{}.{}'.format(type(obj).__name__, obj.id)
+            if k in self.__objects:
+                del self.__objects[k]
                 self.save()
 
     def close(self):
-        """ deserializing the JSON file to objects """
+        """
+        Calls reload() method for deserializing the JSON file to __objects.
+        """
         self.reload()
