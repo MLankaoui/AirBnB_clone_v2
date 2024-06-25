@@ -46,6 +46,10 @@ class DBStorage:
                     k = "{}.{}".format(type(el).__name__, el.id)
                     dc[k] = el
         return (dc)
+    
+    def new(self, obj):
+        self.__session.add(obj)
+
 
 
     
