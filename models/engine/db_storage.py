@@ -51,5 +51,23 @@ class DBStorage:
         self.__session.add(obj)
 
 
+    def delete(self, obj=None):
+        if obj:
+            self.__session.delete()
+
+    
+    def reload(self):
+        """configuration
+        """
+        Base.metadata.create_all(self.__engine)
+        sec = sessionmaker(bind=self.__engine, expire_on_commit=False)
+        Session = scoped_session(sec)
+        self.__session = Session()
+
+    def close(self):
+        """ close session """
+        self.__session.close()
+
+
 
     
