@@ -12,13 +12,13 @@ class FileStorage:
         """Returns a dictionary of models currently in storage"""
         if c is None:
             return self.__objects
-        
+
         else:
             tmp = {}
             for k, v in self.__objects.items():
                 if v.__class__ == c:
                     tmp[k] = v
-            
+
             return tmp
 
     def new(self, obj):
@@ -45,16 +45,16 @@ class FileStorage:
         from models.review import Review
 
         classes = {
-                    'BaseModel': BaseModel, 'User': User, 'Place': Place,
-                    'State': State, 'City': City, 'Amenity': Amenity,
-                    'Review': Review
-                  }
+            'BaseModel': BaseModel, 'User': User, 'Place': Place,
+            'State': State, 'City': City, 'Amenity': Amenity,
+            'Review': Review
+        }
         try:
             temp = {}
             with open(FileStorage.__file_path, 'r') as f:
                 temp = json.load(f)
                 for key, val in temp.items():
-                        self.all()[key] = classes[val['__class__']](**val)
+                    self.all()[key] = classes[val['__class__']](**val)
         except FileNotFoundError:
             pass
 

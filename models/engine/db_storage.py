@@ -50,12 +50,12 @@ class DBStorage:
         Returns:
             None
         """
-        self.__engine = create_engine("mysql+mysqldb://{}:{}@{}:{}/{}".format(
+        self.__engine = create_engine("mysql+mysqldb://{}:{}@{}/{}".format(
             getenv("HBNB_MYSQL_USER"),
             getenv("HBNB_MYSQL_PWD"),
             getenv("HBNB_MYSQL_HOST"),
             getenv("HBNB_MYSQL_DB")
-        ),pool_pre_ping=True)
+        ), pool_pre_ping=True)
 
         if getenv("HBNB_ENV") == "test":
             Base.metadata.drop_all(self.__engine)
@@ -80,13 +80,13 @@ class DBStorage:
                 dc[k] = el
         else:
             ls = [State, City, User, Place, Review, Amenity]
-            for clase in dc:
+            for clase in ls:
                 qr = self.__session.query(clase)
                 for el in qr:
                     k = "{}.{}".format(type(el).__name__, el.id)
                     dc[k] = el
         return (dc)
-    
+
     def new(self, obj):
         """
         Adds a new object to the current session.
@@ -99,6 +99,17 @@ class DBStorage:
         """
         self.__session.add(obj)
 
+    def save(self):
+        """
+        Saves changes in the current session.
+
+        Args:
+            None
+
+        Returns:
+            None
+        """
+        self.__session.commit()
 
     def delete(self, obj=None):
         """
@@ -111,9 +122,8 @@ class DBStorage:
             None
         """
         if obj:
-            self.session.delete()
+            self.session.delete(obj)
 
-    
     def reload(self):
         """
         Configures a new session with the current engine and reloads data from the database.
@@ -140,4 +150,3 @@ class DBStorage:
             None
         """
         self.__session.close()
-

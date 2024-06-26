@@ -38,7 +38,7 @@ class State(BaseModel, Base):
         """
         if STORAGE_TYPE != 'db':
             v = models.storage.all()
-            ls = {}
+            ls = []
             rs = []
 
             for k in v:
@@ -54,4 +54,4 @@ class State(BaseModel, Base):
             return rs
         
         else:
-            return [city for city in self.citites]
+            return [city for city in self.cities]
