@@ -1,26 +1,33 @@
 #!/usr/bin/python3
-"""This is the user class"""
+from sqlalchemy import Column, String
 from sqlalchemy.ext.declarative import declarative_base
 from models.base_model import BaseModel, Base
-from sqlalchemy import Column, Integer, String
 from sqlalchemy.orm import relationship
 from models.place import Place
 from models.review import Review
 
 
+
+
 class User(BaseModel, Base):
-    """This is the class for user
+    """
+    User class that inherits from BaseModel.
+
     Attributes:
-        email: email address
-        password: password for you login
-        first_name: first name
-        last_name: last name
+        __tablename__ (str): The name of the database
+        table associated with this model.
+        email (str): The email of the user.
+        password (str): The password of the user.
+        first_name (str): The first name of the user.
+        last_name (str): The last name of the user.
     """
     __tablename__ = "users"
+
     email = Column(String(128), nullable=False)
     password = Column(String(128), nullable=False)
-    first_name = Column(String(128))
-    last_name = Column(String(128))
+    first_name = Column(String(128), nullable=False)
+    last_name = Column(String(128), nullable=False)
+
     places = relationship("Place", cascade='all, delete, delete-orphan',
                           backref="user")
     reviews = relationship("Review", cascade='all, delete, delete-orphan',
