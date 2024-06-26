@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-"""This module defines a base class for all models in our hbnb clone."""
+"""This module defines a base class for all models in our hbnb clone"""
 import uuid
 from datetime import datetime
 from sqlalchemy import Column, String, DateTime
@@ -10,28 +10,14 @@ Base = declarative_base()
 
 
 class BaseModel:
-    """
-    Base class for all models in our hbnb clone.
-
-    Attributes:
-        id (str): The unique identifier for each instance.
-        created_at (DateTime): The datetime when the instance was created.
-        updated_at (DateTime): The datetime of the last update to the instance.
-    """
+    """A base class for all hbnb models"""
 
     id = Column(String(60), primary_key=True, nullable=False, unique=True)
     created_at = Column(DateTime, nullable=False, default=datetime.utcnow())
     updated_at = Column(DateTime, nullable=False, default=datetime.utcnow())
 
     def __init__(self, *args, **kwargs):
-        """
-        Initializes a new instance of the BaseModel.
-
-        Args:
-            *args: Variable length argument list.
-            **kwargs: Arbitrary keyword arguments.
-
-        """
+        """Instatntiates a new model"""
         if not kwargs.get('id'):
             self.id = str(uuid.uuid4())
         else:
@@ -57,31 +43,19 @@ class BaseModel:
             self.__dict__.update(kwargs)
 
     def __str__(self):
-        """
-        Returns a string representation of the BaseModel instance.
-
-        Returns:
-            str: Formatted string with class name, instance id, and instance attributes.
-        """
+        """Returns a string representation of the instance"""
         cls = (str(type(self)).split('.')[-1]).split('\'')[0]
         return '[{}] ({}) {}'.format(cls, self.id, self.__dict__)
 
     def save(self):
-        """
-        Updates the updated_at attribute with the current datetime and saves the instance.
-        """
+        """Updates updated_at with current time when instance is changed"""
         from models import storage
         self.updated_at = datetime.now()
         storage.new(self)
         storage.save()
 
     def to_dict(self):
-        """
-        Converts the instance into a dictionary representation.
-
-        Returns:
-            dict: Dictionary representation of the instance attributes.
-        """
+        """Convert instance into dict format"""
         dictionary = {}
         dictionary.update(self.__dict__)
         dictionary.update({'__class__':
@@ -95,8 +69,6 @@ class BaseModel:
         return dictionary
 
     def delete(self):
-        """
-        Deletes the current instance from storage.
-        """
+        """ Deletes current instance from storage """
         from models import storage
         storage.delete(self)
